@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "679496463018",
+    "project_id": "cogbot-5f913",
+    "storage_bucket": "cogbot-5f913.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679496463018:android:23da41a9d8f2a6a8b496d3",
+        "android_client_info": {
+          "package_name": "com.example.cogbot"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDT5MqBjNexhvPF3LTEHn9gPY5Ho7XnaA0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
