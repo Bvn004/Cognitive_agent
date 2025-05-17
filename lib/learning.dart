@@ -4,13 +4,7 @@ import 'package:cogbot/chatmessage.dart';
 import 'package:cogbot/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-
-final TextEditingController _textController = TextEditingController();
-List<ChatMessage> _messages = [];
-final ScrollController _scrollController = ScrollController();
-bool _isLoading = false;
-bool _isInitialTopic = true;
-String? _currentChatId;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Learning_Chat extends StatefulWidget {
   const Learning_Chat({super.key});
@@ -20,6 +14,14 @@ class Learning_Chat extends StatefulWidget {
 }
 
 class _Learning_ChatState extends State<Learning_Chat> {
+  // Move these variables inside the class as instance variables
+  final TextEditingController _textController = TextEditingController();
+  final List<ChatMessage> _messages = [];
+  final ScrollController _scrollController = ScrollController();
+  bool _isLoading = false;
+  bool _isInitialTopic = true;
+  String? _currentChatId;
+
   @override
   void initState() {
     super.initState();
@@ -90,7 +92,8 @@ class _Learning_ChatState extends State<Learning_Chat> {
 
     setState(() {
       _currentChatId = chatId;
-      _messages = filteredMessages;
+      _messages.clear(); // Clear existing messages first
+      _messages.addAll(filteredMessages); // Then add the loaded messages
       _isInitialTopic = false;
     });
   }
@@ -110,7 +113,6 @@ class _Learning_ChatState extends State<Learning_Chat> {
           if (!_isInitialTopic)
             IconButton(
               icon: const Icon(Icons.add),
-              tooltip: 'Start New Topic',
               onPressed: () {
                 setState(() {
                   _messages.clear();
@@ -183,6 +185,7 @@ class _Learning_ChatState extends State<Learning_Chat> {
 
   @override
   void dispose() {
+    // Properly dispose controllers when leaving the screen
     _textController.dispose();
     _scrollController.dispose();
     super.dispose();
