@@ -21,16 +21,22 @@ class Homepage extends StatelessWidget {
 
     if (!hasAlreadyTakenAssessment) {
       // Only navigate to assessment if they haven't taken it
-      Navigator.of(
-        context,
-      ).push(MaterialPageRoute(builder: (context) => AssessmentScreen()));
+      if (context.mounted) {
+        // Check if context is still active
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (context) => AssessmentScreen()));
+      }
     } else {
       // Show a message if they've already taken the assessment
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('You have already completed the assessment'),
-        ),
-      );
+      if (context.mounted) {
+        // Check if context is still active
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('You have already completed the assessment'),
+          ),
+        );
+      }
     }
   }
 
@@ -50,21 +56,42 @@ class Homepage extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
-                bool hastakenAssessment = await hasTakenAssessment(userId!);
-
-                if (hastakenAssessment) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => Learning_Chat()),
-                  );
-                } else {
+                if (userId == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please complete the assessment first'),
-                    ),
+                    const SnackBar(content: Text('Please log in first')),
                   );
+                  return;
+                }
+
+                try {
+                  // Rename the variable to avoid conflict with the function name
+                  bool assessmentCompleted = await hasTakenAssessment(userId!);
+
+                  if (context.mounted) {
+                    // Check if context is still active
+                    if (assessmentCompleted) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const Learning_Chat(),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please complete the assessment first'),
+                        ),
+                      );
+                    }
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error: ${e.toString()}')),
+                    );
+                  }
                 }
               },
-              child: Text('Start Learning'),
+              child: const Text('Start Learning'),
             ),
           ],
         ),
