@@ -10,35 +10,62 @@ class ChatMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment:
+            isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment:
-                  isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          if (!isUser)
+            Column( // Use Column to position the avatar and icon
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                isUser
-                    ? Container(
-                      padding: const EdgeInsets.all(12.0),
-                      decoration: BoxDecoration(
-                        color: Colors.deepPurple.shade100,
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                      child: Text(text),
-                    )
-                    : Container(
-                      padding: const EdgeInsets.all(12.0),
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 255, 255, 255),
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                      child: MarkdownBody(data: text, selectable: true),
-                    ),
+                CircleAvatar(
+                  backgroundColor: Colors.deepPurple.shade800,
+                  child: Icon(Icons.psychology, color: Colors.white), // AI avatar with icon
+                ),
+                const SizedBox(height: 5),
               ],
             ),
+          const SizedBox(width: 10),
+          Flexible( // ✅ Constrain width of message bubble
+            child: Container(
+              padding: const EdgeInsets.all(12.0),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: isUser
+                      ? [Colors.deepPurple.shade200, Colors.deepPurple.shade400]
+                      : [Colors.white, Colors.grey.shade200],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(16.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: MarkdownBody( // ✅ Use only Markdown for consistency
+                data: text,
+                selectable: true,
+                styleSheet: MarkdownStyleSheet(
+                  p: TextStyle(
+                    fontSize: 16,
+                    color: isUser ? Colors.white : Colors.black87,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
           ),
+          const SizedBox(width: 10),
+          if (isUser)
+            CircleAvatar(
+              backgroundColor: Colors.deepPurple.shade800,
+              child: Icon(Icons.person, color: Colors.white),
+            ),
         ],
       ),
     );

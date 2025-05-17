@@ -1,11 +1,10 @@
-import 'package:cogbot/assessment_screen.dart';
-import 'package:cogbot/login.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'splash_screen.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Required before initializing Firebase
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MainApp());
 }
@@ -15,6 +14,14 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: LoginScreen());
+    return MaterialApp(
+      title: 'CogBot',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.indigo,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: const SplashScreen(),
+    );
   }
 }

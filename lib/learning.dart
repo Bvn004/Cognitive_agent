@@ -1,11 +1,9 @@
 import 'package:cogbot/api.dart';
 import 'package:cogbot/chat_drawe.dart';
 import 'package:cogbot/chatmessage.dart';
-import 'package:cogbot/login.dart'; // This should have the global `userId` variable
+import 'package:cogbot/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-// Import the ChatDrawer widget
 
 final TextEditingController _textController = TextEditingController();
 List<ChatMessage> _messages = [];
@@ -25,12 +23,10 @@ class _Learning_ChatState extends State<Learning_Chat> {
   @override
   void initState() {
     super.initState();
-    // Optionally, load the last active chat or start with an empty state
   }
 
   Future<void> _handleSubmitted(String text) async {
     if (text.trim().isEmpty) return;
-
     _textController.clear();
 
     setState(() {
@@ -48,35 +44,28 @@ class _Learning_ChatState extends State<Learning_Chat> {
         response = await topicToLearn(userId: userId!, concept: text);
         _currentChatId = response['chat_id'];
         _isInitialTopic = false;
-        // The backend should handle saving the initial message and response
       } else {
         response = await sendFollowUpQuestion(
           userId: userId!,
           chatId: _currentChatId!,
           message: text,
         );
-        // The backend should handle saving the follow-up question and response
       }
 
-      final botResponse =
-          wasInitialTopic
-              ? (response['output'] ??
-                  "Sorry, I couldn't find information on that topic.")
-              : (response['response'] ??
-                  "Sorry, I couldn't process your follow-up question.");
+      final botResponse = wasInitialTopic
+          ? (response['output'] ?? "Sorry, I couldn't find information on that topic.")
+          : (response['response'] ?? "Sorry, I couldn't process your follow-up question.");
 
       setState(() {
         _messages.add(ChatMessage(text: botResponse, isUser: false));
         _isLoading = false;
       });
     } catch (e) {
-      final errorMessage =
-          "Sorry, there was an error processing your request: ${e.toString()}";
+      final errorMessage = "Error: ${e.toString()}";
       setState(() {
         _messages.add(ChatMessage(text: errorMessage, isUser: false));
         _isLoading = false;
       });
-      // The backend should handle saving the error message if needed
     }
 
     _scrollToBottom();
@@ -95,14 +84,9 @@ class _Learning_ChatState extends State<Learning_Chat> {
   }
 
   void _loadChat(String chatId, List<ChatMessage> messages) {
-    // Filter out the first message if it's the profile initialization
-    List<ChatMessage> filteredMessages =
-        messages
-            .skipWhile(
-              (message) =>
-                  !message.isUser && message.text.startsWith('Profile:'),
-            )
-            .toList();
+    List<ChatMessage> filteredMessages = messages
+        .skipWhile((message) => !message.isUser && message.text.startsWith('Profile:'))
+        .toList();
 
     setState(() {
       _currentChatId = chatId;
@@ -117,14 +101,16 @@ class _Learning_ChatState extends State<Learning_Chat> {
       drawer: ChatDrawer(onChatSelected: _loadChat),
       appBar: AppBar(
         title: Text(
-          _isInitialTopic ? 'Start Learning' : '', // More dynamic title
+          _isInitialTopic ? 'Start Learning' : 'Your Learning Session',
+          style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.white),
         ),
-        backgroundColor: const Color.fromARGB(255, 143, 143, 143),
-        elevation: 0,
+        backgroundColor: Colors.deepPurple.shade800,
+        elevation: 2,
         actions: [
           if (!_isInitialTopic)
             IconButton(
-              icon: Icon(Icons.add),
+              icon: const Icon(Icons.add),
+              tooltip: 'Start New Topic',
               onPressed: () {
                 setState(() {
                   _messages.clear();
@@ -132,7 +118,6 @@ class _Learning_ChatState extends State<Learning_Chat> {
                   _currentChatId = null;
                 });
               },
-              tooltip: 'Start New Topic',
             ),
         ],
       ),
@@ -141,43 +126,52 @@ class _Learning_ChatState extends State<Learning_Chat> {
           Expanded(
             child: ListView.builder(
               controller: _scrollController,
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               itemCount: _messages.length,
               itemBuilder: (context, index) => _messages[index],
             ),
           ),
           if (_isLoading)
             const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
+              padding: EdgeInsets.symmetric(vertical: 12.0),
               child: Center(child: CircularProgressIndicator()),
             ),
           const Divider(height: 1.0),
           Container(
-            decoration: BoxDecoration(color: Theme.of(context).cardColor),
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.fromLTRB(12, 8, 12, 16), // Bottom padding to raise input
+            color: Colors.grey[100],
             child: Row(
               children: [
                 Expanded(
-                  child: TextField(
-                    controller: _textController,
-                    decoration: InputDecoration(
-                      hintText:
-                          _isInitialTopic
-                              ? 'Enter a topic to learn...'
-                              : 'Ask a follow-up question...',
-                      border: InputBorder.none,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(color: Colors.deepPurple.shade200),
                     ),
-                    onSubmitted:
-                        _isLoading ? null : (text) => _handleSubmitted(text),
-                    enabled: !_isLoading,
+                    child: TextField(
+                      controller: _textController,
+                      enabled: !_isLoading,
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                        hintText: _isInitialTopic
+                            ? 'Enter a topic to learn...'
+                            : 'Ask a follow-up question...',
+                        border: InputBorder.none,
+                      ),
+                      onSubmitted: _isLoading ? null : _handleSubmitted,
+                    ),
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.send),
-                  onPressed:
-                      _isLoading
-                          ? null
-                          : () => _handleSubmitted(_textController.text),
+                const SizedBox(width: 10),
+                CircleAvatar(
+                  backgroundColor: Colors.deepPurple.shade800,
+                  child: IconButton(
+                    icon: const Icon(Icons.send, color: Colors.white),
+                    onPressed: _isLoading
+                        ? null
+                        : () => _handleSubmitted(_textController.text),
+                  ),
                 ),
               ],
             ),
