@@ -16,7 +16,7 @@ Future<String> getnextquestion() async {
         // Assessment received — save it
         await saveAssessmentToFirebase(userId!);
 
-        return 'Assessment saved successfully';
+        return data['classification']['profile'] ?? 'No profile found.';
       }
 
       print(response.body);
