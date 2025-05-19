@@ -103,6 +103,7 @@ class _Learning_ChatState extends State<Learning_Chat> {
     return Scaffold(
       drawer: ChatDrawer(onChatSelected: _loadChat),
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           _isInitialTopic ? 'Start Learning' : 'Your Learning Session',
           style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.white),
@@ -112,7 +113,8 @@ class _Learning_ChatState extends State<Learning_Chat> {
         actions: [
           if (!_isInitialTopic)
             IconButton(
-              icon: const Icon(Icons.add),
+              icon: const Icon(Icons.add, color: Colors.white),
+            
               onPressed: () {
                 setState(() {
                   _messages.clear();
