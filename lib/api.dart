@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cogbot/login.dart';
 import 'package:http/http.dart' as http;
 
+
 Future<String> getnextquestion() async {
   final uri = Uri.parse('http://10.0.2.2:5002/next-question?user_id=$userId');
 
@@ -112,6 +113,19 @@ Future<bool> hasTakenAssessment(String userId) async {
     return false;
   }
 }
+Future<String> getUserClassification(String userId) async {
+  final response = await http.get(
+    Uri.parse('http://10.0.2.2:8000/profile?user_id=$userId'),
+  );
+
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body);
+    return data['classification'] ?? 'Unknown';
+  } else {
+    throw Exception('Failed to fetch classification');
+  }
+}
+
 
 Future<Map<String, dynamic>> topicToLearn({
   required String userId,

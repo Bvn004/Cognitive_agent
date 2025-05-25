@@ -331,71 +331,74 @@ class _AssessmentScreenState extends State<AssessmentScreen> with SingleTickerPr
     );
   }
 
-  Widget _buildQuestionView() {
-    return Container(
-      key: const ValueKey('questions'),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xFFF1F1F1), Color(0xFFffffff)],
-        ),
+Widget _buildQuestionView() {
+  return Container(
+    key: const ValueKey('questions'),
+    decoration: const BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [Color(0xFFF1F1F1), Color(0xFFffffff)],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: _isLoading && _questionCount > 0
-            ? _buildLoadingView()
-            : AnimatedBuilder(
-                animation: _animationController,
-                builder: (context, child) {
-                  return Transform.translate(
-                    offset: Offset(0, _slideAnimation.value),
-                    child: Opacity(opacity: _fadeInAnimation.value, child: child),
-                  );
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: Colors.deepPurple.shade800.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(_getProgressIndicator(), style: TextStyle(color: Colors.deepPurple.shade800, fontSize: 12)),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: _isLoading && _questionCount > 0
+          ? _buildLoadingView()
+          : AnimatedBuilder(
+              animation: _animationController,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(0, _slideAnimation.value),
+                  child: Opacity(opacity: _fadeInAnimation.value, child: child),
+                );
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.deepPurple.shade800.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        const Spacer(),
-                        Text('Question $_questionCount', style: TextStyle(color: Colors.grey[500], fontSize: 14)),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                    Card(
-                      color: Colors.white,
-                      elevation: 3,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(24),
-                        child: Column(
-                          children: [
-                            const Icon(Icons.psychology, color: Colors.deepPurple, size: 32),
-                            const SizedBox(height: 16),
-                            Text(
-                              _question,
-                              style: const TextStyle(
-                                fontSize: 19,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                                height: 1.4,
-                              ),
-                              textAlign: TextAlign.center,
+                        child: Text(_getProgressIndicator(), style: TextStyle(color: Colors.deepPurple.shade800, fontSize: 12)),
+                      ),
+                      const Spacer(),
+                      Text('Question $_questionCount', style: TextStyle(color: Colors.grey[500], fontSize: 14)),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  Card(
+                    color: Colors.white,
+                    elevation: 3,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        children: [
+                          const Icon(Icons.psychology, color: Colors.deepPurple, size: 32),
+                          const SizedBox(height: 16),
+                          Text(
+                            _question,
+                            style: const TextStyle(
+                              fontSize: 19,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                              height: 1.4,
                             ),
-                          ],
-                        ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 24),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Only show input and submit if less than 5 questions
+                  if (_questionCount <= 5) ...[
                     TextField(
                       controller: _answerController,
                       style: const TextStyle(color: Colors.black),
@@ -424,9 +427,38 @@ class _AssessmentScreenState extends State<AssessmentScreen> with SingleTickerPr
                           : const Text("Submit Answer", style: TextStyle(fontSize: 16, color: Colors.white)),
                     ),
                   ],
-                ),
+
+                  // Show classification result when 5 questions are done
+                  if (_questionCount > 5 && _classifiedCategory != null) ...[
+                    const SizedBox(height: 24),
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.deepPurple.shade800.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.deepPurple.shade800.withOpacity(0.5)),
+                      ),
+                      child: Column(
+                        children: [
+                          const Text('Your Classification:', style: TextStyle(fontSize: 18, color: Colors.black)),
+                          const SizedBox(height: 12),
+                          Text(
+                            _classifiedCategory!,
+                            style: const TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.deepPurple,
+                              letterSpacing: 1.2,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
               ),
-      ),
-    );
-  }
-}
+            ),
+    ),
+  );
+}}
