@@ -49,13 +49,10 @@ This app dynamically assesses a user's cognitive traits through a short interact
 ## Application Screenshots
 
 ![WhatsApp Image 2025-07-07 at 6 36 55 PM](https://github.com/user-attachments/assets/6aa6500b-caa1-46c6-98f1-37f02e817646)
-
+![WhatsApp Image 2025-07-07 at 6 41 06 PM](https://github.com/user-attachments/assets/ea2f8fa1-0521-4ebf-a27d-856a4db8f8f2)
 ![WhatsApp Image 2025-07-07 at 6 36 55 PM (1)](https://github.com/user-attachments/assets/dc90db53-3e96-4f9a-ad47-c959edd79fec)
-
 ![WhatsApp Image 2025-07-07 at 6 25 32 PM (1)](https://github.com/user-attachments/assets/820b56b5-b1a5-4209-90f6-9fcd59b2c64d)
 ![WhatsApp Image 2025-07-07 at 6 44 44 PM](https://github.com/user-attachments/assets/e6d61d1b-6052-49a9-b54b-74c93a19f78b)
 ![WhatsApp Image 2025-07-07 at 6 42 02 PM](https://github.com/user-attachments/assets/de0fe5d9-c9cc-4151-bab3-56fd3ae66479)
 
 ---
-
-Built by Jashwanth S,Venkatnarayanan B
