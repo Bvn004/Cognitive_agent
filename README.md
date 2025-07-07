@@ -51,17 +51,8 @@ This app dynamically assesses a user's cognitive traits through a short interact
 ![WhatsApp Image 2025-07-07 at 6 25 02 PM](https://github.com/user-attachments/assets/b19fac04-0c69-4aa9-8c3b-ede3a73e9f76)
 
 ![WhatsApp Image 2025-07-07 at 6 25 32 PM](https://github.com/user-attachments/assets/47c4547d-f9de-439c-875d-8d46d298312e)
-![WhatsApp Image 2025-07-07 at 6 25 31 PM](https://github.com/user-attachments/assets/0cddb313-ac7d-469e-86e8-75fc69bc03ec)
 
-
-
-## 🛡 License
-
-MIT License
 
 ---
 
-## 👤 Author
-
 Built by Jashwanth S,Venkatnarayanan B
-Contact: 
