@@ -1,4 +1,4 @@
-# 🧠 Cognitive Learning App
+# 🧠 Personalised Learning App
 
 This repository contains the full-stack implementation of a personalized cognitive learning application. It includes a **Flutter frontend** and a **Flask-based backend** integrated with **Firebase Firestore** and **Groq LLM**.
 
